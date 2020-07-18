@@ -1,4 +1,5 @@
 from collections import deque
+from collections import defaultdict
 # ############################### 207 课程表 ############################################
 """
 你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。
@@ -57,5 +58,120 @@ def canFinish_link(self, numCourses: int, prerequisites) -> bool:
     return not numCourses
 
 # ############################### 310 最小高度树 ############################################
-# 思路 弗洛伊德全局最短路径算法
+# 类似于拓扑排序
+def findMinHeightTrees(n: int, edges):
+    adjacent = [[] for i in range(n)]  # 邻接表
+    tree_height = {i: 0 for i in range(n)}  # 树高字典
+    for i, j in edges:
+        adjacent[i].append(j)
+        adjacent[j].append(i)
+    def dijskra(vo):
+        path = [None for _ in range(n)]
+        count = 0
+        cans = [(0, vo, vo)]
+        while count < n and cans:
+            distance, vi, vj = cans.pop()
+            if path[vj]: continue
+            path[vj] = distance
+            for vk in adjacent[vj]:
+                if path[vk] is None:
+                    cans.append((distance + 1, vj, vk))
+            cans.sort(reverse=True)
+        return path
+    for i in range(n):
+        path = dijskra(i)
+        path.sort()
+        tree_height[i] = path[-1]
+    ret = sorted(tree_height.items(), key=lambda x: x[1])
+    dis_mem = ret[0][1]
+    res = []
+    for v, dis in ret:
+        if dis == dis_mem:
+            res.append(v)
+        else:
+            break
+    return res
+# 超时
+###################### 1092
+def findMinHeightTrees2(n: int, edges):
+    if n <= 2:
+        return list(range(n))
+    degree = [0 for _ in range(n)]  # 度表
+    adjacent = [[] for _ in range(n)]  # 邻接表
+    for i, j in edges:
+        adjacent[i].append(j)
+        degree[i] += 1
+        degree[j] += 1
+        adjacent[j].append(i)
+    cans = list(range(n))
+    one_d = []
+    for i in range(n):  # 度为1
+        if degree[i] == 1:
+            one_d.append(i)
+            cans.remove(i)
+    if len(cans) <= 2:
+        return cans
+    while True:
+        new_one = []
+        while one_d:
+            vi = one_d.pop()  # 节点索引
+            for vj in adjacent[vi]:
+                degree[vj] -= 1
+                if degree[vj] == 1 and vj in cans:
+                    cans.remove(vj)
+                    new_one.append(vj)
+        one_d =new_one
+        if len(cans) <= 2:
+            return cans
+###################### 372
+def findMinHeightTrees3(n: int, edges):
+    if n <= 2:
+        return list(range(n))
+    degree = [0 for _ in range(n)]  # 度表
+    adjacent = [[] for _ in range(n)]  # 邻接表
+    for i, j in edges:
+        adjacent[i].append(j)
+        degree[i] += 1
+        degree[j] += 1
+        adjacent[j].append(i)
+    cans = {i:degree[i] for i in range(n)}
+    one_d = []
+    for i in range(n):  # 度为1
+        if degree[i] == 1:
+            one_d.append(i)
+            del cans[i]
+    if len(cans) <= 2:
+        return list(cans.keys())
+    while True:
+        new_one = []
+        while one_d:
+            vi = one_d.pop()  # 节点索引
+            for vj in adjacent[vi]:
+                degree[vj] -= 1
+                if degree[vj] == 1 and vj in cans:
+                    del cans[vj]
+                    new_one.append(vj)
+        one_d = new_one
+        if len(cans) <= 2:
+            return list(cans.keys())
+########################## 304 0.63
+def findMinHeightTrees4(n: int, edges):
+    if n <= 2: return list(range(n))
+    adjacent = defaultdict(list)  # 邻接表
+    for i, j in edges:
+        adjacent[i].append(j)
+        adjacent[j].append(i)
+    one_degree = [i for i in adjacent if len(adjacent[i]) == 1]
+    while n > 2:
+        new_one = []
+        for vi in one_degree:
+            vj = adjacent[vi].pop()
+            adjacent[vj].remove(vi)
+            if len(adjacent[vj]) == 1:
+                new_one.append(vj)
+            n -= 1
+        one_degree = new_one
+    return new_one
 
+lst = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4]]
+print(findMinHeightTrees2(6, lst))

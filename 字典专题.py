@@ -17,4 +17,13 @@ def dictionairy():
 
 # dictionairy()
 
-# ############################ 字典 #######################################
+# ############################ 字典 工厂模式 #######################################
+from collections import defaultdict
+dict_a = defaultdict(list)
+for i in range(3):
+    dict_a[i].append("hello")
+print(dict_a)
+
+# ############################ 字典 update #######################################
+dict_a.update({2: ["world"]})
+print(dict_a)

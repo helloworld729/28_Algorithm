@@ -11,3 +11,4 @@ list2[-1][-1] -= 3
 print(list2)
 
 # 小结：二维需谨慎，独立用range
+# set集合的用法类似于list，但是leetcode中set似乎更快，用add取代append
