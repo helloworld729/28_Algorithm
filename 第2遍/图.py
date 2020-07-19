@@ -173,5 +173,36 @@ def findMinHeightTrees4(n: int, edges):
         one_degree = new_one
     return new_one
 
-lst = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4]]
-print(findMinHeightTrees2(6, lst))
+# lst = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4]]
+# print(findMinHeightTrees2(6, lst))
+
+#
+from collections import defaultdict
+from copy import deepcopy
+
+
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        adjacent = defaultdict(list)
+        for f, t in tickets:
+            adjacent[f].append(t)
+        for key in adjacent.keys():
+            adjacent[key].sort(reverse=True)
+        res = ["JFK"]
+
+        adjacent_back = deepcopy(adjacent)
+        res_back = deepcopy(res)
+
+        def dfs(res_back, ):
+            if len(res_back) = len(tickets) + 1:
+                break
+            cans = adjacent_back[res[-1]]
+            if cans:
+                next_pos = cans.pop()
+                res_back.append(next_pos)
+            else:
+                return
+
+        return res_back
+
+
