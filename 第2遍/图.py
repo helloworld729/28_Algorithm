@@ -1,5 +1,6 @@
 from collections import deque
 from collections import defaultdict
+from copy import copy,deepcopy
 # ############################### 207 课程表 ############################################
 """
 你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。
@@ -177,32 +178,131 @@ def findMinHeightTrees4(n: int, edges):
 # print(findMinHeightTrees2(6, lst))
 
 #
-from collections import defaultdict
-from copy import deepcopy
+def findItinerary0(tickets):
+    adjacent = defaultdict(list)
+    for f, t in tickets:
+        adjacent[f].append(t)
+    for key in adjacent.keys():
+        adjacent[key].sort()
+    res = ["JFK"]
+    all_plans = []
+
+    def dfs(plan, adjacent):
+        if len(plan) == len(tickets) + 1:
+            all_plans.append(plan)
+            return
+        cans = adjacent[plan[-1]]
+        for next_pos in cans:
+            if len(all_plans) == 0:  # 放在倒2或者for之前都没有这里快
+                plan_now = list(plan)  # 不能影响后续的plan
+                adjacent_now = deepcopy(adjacent)
+                adjacent_now[plan[-1]].remove(next_pos)
+                plan_now.append(next_pos)
+                dfs(plan_now, adjacent_now)
+
+    dfs(res, adjacent)
+    return all_plans[0]
 
 
-class Solution:
-    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-        adjacent = defaultdict(list)
-        for f, t in tickets:
-            adjacent[f].append(t)
-        for key in adjacent.keys():
-            adjacent[key].sort(reverse=True)
-        res = ["JFK"]
+# 递归边界条件与提前终止
+# 边界：目标条件(长度要求)
+# 提前终止：外部变量
 
-        adjacent_back = deepcopy(adjacent)
-        res_back = deepcopy(res)
+def findItinerary(tickets):
+    adjacent = defaultdict(list)
+    for f, t in tickets:
+        adjacent[f].append(t)
+    for key in adjacent.keys():
+        adjacent[key].sort(reverse=True)
+    all_plans = []
+    def dfs(pos_now):
+        while adjacent[pos_now]:
+            pos_next = adjacent[pos_now].pop()
+            dfs(pos_next)
+        all_plans.append(pos_now)
+    dfs("JFK")
+    return all_plans[::-1]
+# tickets =  [["JFK", "C"], ["JFK", "B"], ["C", "JFK"], ]
+# tickets =  [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+# res = findItinerary(tickets)
+# print(res)
+def eventualSafeNodes0(graph):
+    adjacent = defaultdict(list)
+    terminal = []
+    for v, next in enumerate(graph):
+        for pos in next:
+            adjacent[v].append(pos)
+    for v, next in enumerate(graph):
+        if len(next) == 0:
+            terminal.append(v)
 
-        def dfs(res_back, ):
-            if len(res_back) = len(tickets) + 1:
+    def dfs(path, v):
+        if v in terminal:
+            global end_flag
+            end_flag = True
+            return
+        for next_pos in adjacent[v]:
+            global circle_flag
+            if next_pos in path:
+                # global circle_flag
+                circle_flag = True
+                path.append(next_pos)
                 break
-            cans = adjacent_back[res[-1]]
-            if cans:
-                next_pos = cans.pop()
-                res_back.append(next_pos)
+            if not circle_flag:
+                new_path = list(path)
+                new_path.append(next_pos)
+                dfs(new_path, next_pos)
+
+    res = []
+    for i in range(len(graph)):
+        global end_flag
+        end_flag = False
+        global circle_flag
+        circle_flag = False
+        dfs([i], i)
+        if end_flag and not circle_flag:
+            res.append(i)
+    return res
+
+def eventualSafeNodes(graph):
+    terminal = []
+    adjacent = defaultdict(list)
+    for v, next in enumerate(graph):
+        for pos in next:
+            adjacent[v].append(pos)
+
+    for v, next in enumerate(graph):
+        if len(next) == 0:
+            terminal.append(v)
+
+    def dfs(v, visited, i):
+        flag = True
+        terminal_flag = False
+        for next_pos in adjacent[v]:
+            if visited[next_pos] >= 1:
+                return False
+            if next_pos in terminal:
+                terminal_flag = True
+            if not terminal_flag:
+                visited[next_pos] += 1
+                flag_now = dfs(next_pos, visited, i)
+                flag &= flag_now
+                if not flag:
+                    return False
             else:
-                return
+                terminal_flag = False
+                for key in visited.keys():
+                    if key >= next_pos:
+                        visited[key] = 0
+        return flag
 
-        return res_back
+    res = []
+    for i in range(len(graph)):
+        visited = defaultdict(int)
+        visited[i] = 1
+        safe_flag = dfs(i, visited, i)
+        if safe_flag: res.append(i)
+    return res
 
-
+graph = [[],[0,2,3,4],[3],[4],[]]
+print(eventualSafeNodes(graph))
