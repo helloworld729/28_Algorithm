@@ -18,6 +18,7 @@ def dictionairy():
 # dictionairy()
 
 # ############################ 字典 工厂模式 #######################################
+# 默认模式创建的，例如默认采用int类型，可以直接dict_a[0] + 1
 from collections import defaultdict
 dict_a = defaultdict(list)
 for i in range(3):
@@ -25,5 +26,16 @@ for i in range(3):
 print(dict_a)
 
 # ############################ 字典 update #######################################
-dict_a.update({2: ["world"]})
-print(dict_a)
+dict_a.update({2: ["world"]})  # {0: ['hello'], 1: ['hello'], 2: ['hello']}
+print(dict_a)  # {0: ['hello'], 1: ['hello'], 2: ['world']}
+
+# ############################ 字典 拷贝 #########################################
+# 浅拷贝的时候假如value为简单对象，则独立赋值，复杂对象(list)还是同一块内存
+# 深拷贝完全独立
+
+# ############################ value=None ########################################
+# value为None，确实为None
+path = {i: None for i in range(1, 5+1)}
+print(path)
+print(path[1] is None)
+
