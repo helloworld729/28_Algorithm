@@ -85,14 +85,13 @@ def preorder_nonrec(root):
     while st:
         root = st.pop()
         while root is not None:
-            res.append(root.data)
+            res.append(root.data)  # 先干为敬,nikeruzhan
             st.append(root.right)
             root = root.left
     return res
 
 def midorder_nonrec(root):
     res, st = [], []
-
     while st or root is not None:
         while root is not None:
             st.append(root)
@@ -100,25 +99,18 @@ def midorder_nonrec(root):
 
         node = st.pop()
         res.append(node.data)
-
-        root = node.right
+        root = node.right  # 刮风下雨，都会来右边看一看
     return res
 
 def postorder_nonrec(root):
     res, st = [], []
-
     while st or root is not None:
         while root is not None:
             st.append(root)
             root = root.left if root.left else root.right
-
         node = st.pop()
         res.append(node.data)
-
-        if st and st[-1].left == node:
-            root = st[-1].right
-        else:
-            root = None
+        root = st[-1].right if node == st[-1].left else None  # 越俎代庖
     return res
 
 root = BinTNode(0, BinTNode(1, BinTNode(3, BinTNode(7), BinTNode(8)),
