@@ -1,4 +1,3 @@
-
 # 判断是否镜像对称
 class Solution:
     def isSymmetric(self, root) -> bool:
