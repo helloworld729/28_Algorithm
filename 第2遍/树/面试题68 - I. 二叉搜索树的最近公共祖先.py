@@ -19,9 +19,9 @@ class Solution:
     def lowestCommonAncestor2(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         # https://leetcode-cn.com/problems/first-common-ancestor-lcci/
         # 适用于所有二叉树，
-        if(not root or root == p or root == q):
-            return root
+        if(not root or root == p or root == q):  # 能够到这里，说明前面都没有碰到p/q,当前节点又和其中一个相等，则
+            return root                          # 该节点就是最近的公共祖先
         left = self.lowestCommonAncestor(root.left, p, q)
         right = self.lowestCommonAncestor(root.right, p, q)
-        if left and right: return root
-        return left if left else right
+        if left and right: return root  # 左右子树分别找到了一个，说明节点就是祖先
+        return left if left else right  # 只在一侧(当然可能在子树的两侧)
