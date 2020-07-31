@@ -42,22 +42,18 @@ def calculate(s: str) -> int:
         ch = s[i]
 
         if ch.isdigit():
-
             # Forming the operand - in reverse order.
             operand = (10**n * int(ch)) + operand
             n += 1
-
         elif ch != " ":
             if n:
                 # Save the operand on the stack
                 # As we encounter some non-digit.
                 stack.append(operand)  # 操作数入栈
                 n, operand = 0, 0
-
             if ch == '(':
                 res = evaluate_expr(stack)
                 stack.pop()
-
                 # Append the evaluated result to the stack.
                 # This result could be of a sub-expression within the parenthesis.
                 stack.append(res)
@@ -140,7 +136,6 @@ def searchMatrix(matrix, target):
     :type target: int
     :rtype: bool
     """
-
     def bin_search(lst, target):
         l, r = 0, len(lst) - 1
         while l < r:

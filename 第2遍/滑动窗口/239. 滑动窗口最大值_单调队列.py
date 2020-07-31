@@ -25,20 +25,22 @@
 from collections import deque
 class Solution:
     def maxSlidingWindow(self, nums, k: int):
-        n = len(nums)  # 处理特殊情况，可以降低时间
+        # 思路：维护一个单调减的队列
+        n = len(nums)
+        # 处理特例
         if n * k == 0: return []
         if k == 1: return nums
 
-        res, que, r = [], deque(), 0        # 返回容器，单调队列，右边界初始化
-        for l in range(n - k + 1):  # 左边界推进
-            if que and l > que[0]: que.popleft()
-            while r < l + k:                      # 只在第一次会循环多次，后面只会一次
-                cans = nums[r]
-                if que and cans > nums[que[-1]]:  # 先把小数干掉
-                    while que and cans > nums[que[-1]]:
-                        que.pop()
-                # 全部干掉了，或者当前值不是最大的，但是窗口未满(下一轮就可能最大了，所以要保存)
-                if len(que) < k: que.append(r)
-                r += 1
+        res, que = [], deque()
+        for i in range(n):  # 维护单调队列
+            if que and i - que[0] >= k: que.popleft()
+            while que and nums[que[-1]] < nums[i]:
+                que.pop()
+            que.append(i)
             res.append(nums[que[0]])
-        return res
+        return res[k - 1:]
+
+# 注意与前缀和处理方式的不一样：
+# 数组的长度、更新res的时间
+# 当然，如果返回整个数组的最大值，不用截断不过那样直接max()就行了
+
