@@ -13,10 +13,10 @@ que = deque()  # (位置，数据)
 for i in range(N):
     (v, w, s) = list(map(int, input().split()))
     for j in range(v):  # 余数划分,每个物品都会更新完所有的位置
-        que.clear()
+        que.clear()     # 特别容易忘记
         for k in range(0, (V-j) // v + 1):  # 序列长度
             if que and k - que[0][0] > s: que.popleft()  # 最大值是否越界
-            rest = dp[j + k * v] - k * w
+            rest = dp[j + k * v] - k * w  # 核心代码
             while que and que[-1][1] < rest:
                 que.pop()
             que.append((k, rest))
