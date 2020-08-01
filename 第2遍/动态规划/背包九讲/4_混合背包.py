@@ -17,7 +17,7 @@ si>0 表示第 i 种物品可以使用 si 次；
 from collections import deque
 N, V = map(int, input().split())
 dp = [0] * (1+V)
-que = deque()  # (位置，数据)
+# que = deque()  # (位置，数据)
 
 def zero_one_pack(dp, ci, wi):
     for v in range(V, ci-1, -1):
