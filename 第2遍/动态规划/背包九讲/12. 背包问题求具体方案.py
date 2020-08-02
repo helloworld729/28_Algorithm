@@ -6,35 +6,20 @@
 类型：01背包，最大价值
 特点：在线更新方式
 """
-from copy import deepcopy
+
 (N, V) = list(map(int, input().split()))
-dp = [[0] * (V+1) for i in range(N)]
-c_lst, w_lst = [], []
+dp = [[0] * (V+1) for i in range(N+1)]
+v_lst, w_lst = [0], [0]
 for i in range(N):
     (c, w) = list(map(int, input().split()))  # 体积(对应到列表要减1)，价值
-    c_lst.append(c)
+    v_lst.append(c)
     w_lst.append(w)
-count = -1
-for (c, w) in zip(c_lst, w_lst):
-    count += 1
-    dp[count] = deepcopy(dp[count-1])
-    for v in range(V, c-1, -1):  # 在线更新，v要>=c，才能使用c
-        dp[count][v] = max(dp[count-1][v], dp[count-1][v-c]+w)  # 状态转移
-for d in dp:
-    print(d)
-print(dp[-1])
+for i in range(N, 0, -1):
+    for j in range(V, v_lst[i]-1):
+        dp[i][j] = max(dp[i+1][j], dp[i+1][j-v_lst[i]]+w_lst[i])
+print(dp)
 
-res = []
-# 编号序列
-target = dp[-1][-1]
-for i in range(N-1, 0, -1):  # 遍历物品
-    for j in range(1, V+1, 1):  # 遍历体积
-        if dp[i-1][j] + w_lst[i] == target:
-            res.append(str(i+1))
-            target -= w_lst[i]
-            break
-        elif dp[i-1][j] == target:
-            if i-1 == 0:
-                res.append(str(i))
-            break
-print(" ".join(res[::-1]))
+
+
+
+
