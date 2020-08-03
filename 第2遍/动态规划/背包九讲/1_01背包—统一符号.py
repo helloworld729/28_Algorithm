@@ -11,7 +11,6 @@ dp = [0] * (V+0)
 
 for i in range(N):
     (c, w) = list(map(int, input().split()))  # 体积(对应到列表要减1)，价值
-    c = c
     for v in range(V-1, c-1, -1):  # 在线更新，v要>=c，才能使用c
         dp[v] = max(dp[v], dp[v-c]+w)  # 状态转移
     print(dp)

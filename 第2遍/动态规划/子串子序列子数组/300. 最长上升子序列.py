@@ -17,6 +17,7 @@
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 思路： 状态dp[i]以num[i]结尾的最长上升序列
+类似的问法： 
 """
 class Solution:
     def lengthOfLIS(self, nums) -> int:
