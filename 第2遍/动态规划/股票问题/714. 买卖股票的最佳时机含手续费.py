@@ -19,7 +19,7 @@
 
 class Solution:
     def maxProfit(self, prices, fee: int) -> int:
-        """2000ms 5%"""
+        """2000ms 5% 四个状态分别表示 持仓卖出， 持仓无操作， 空仓买入， 空仓无操作"""
         ll = len(prices)
         if ll < 2: return 0
 
@@ -37,7 +37,8 @@ class Solution:
         return max(dp[-1][0], dp[-1][3])
 
     def maxProfit2(self, prices, fee: int) -> int:
-        """1504ms  5%"""
+        """1504ms  5% 虽然钱少了，但是换成了等价的黄金在手里，最后卖了，
+        所以对购买而言，是不用付一个price的  两个状态分别是空仓和持仓"""
         ll = len(prices)
         if ll < 2: return 0
         dp = [[0 for _ in range(2)] for _ in range(ll)]
@@ -46,13 +47,21 @@ class Solution:
             increase = prices[i]-prices[i-1]
             dp[i][0] = max(dp[i-1][0],            dp[i-1][1]+increase-fee)  # right
             dp[i][1] = max(dp[i-1][0],            dp[i-1][1]+increase)      # right
-            # for da in dp:
-            #     print(da)
-            # print("#################################")
-
         return dp[-1][0]
 
+    def maxProfit3(self, prices, fee: int) -> int:
+        """1016ms 58% 优化空间后，提速了很多"""
+        ll = len(prices)
+        if ll < 2: return 0
+        empty, hold = 0, 0
+        for i in range(1, ll):
+            new_hold = prices[i]-prices[i-1] + hold
+            empty_back = empty
+            empty = max(empty,  new_hold-fee)  # right
+            hold =  max(empty_back,  new_hold)      # right
+        return empty
+
 a = Solution()
-price = [1, 3, 2, 8, 4, 9]
+price = [1, 3,5]
 fee = 2
 print(a.maxProfit2(price, fee))
