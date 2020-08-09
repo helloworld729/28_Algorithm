@@ -19,8 +19,8 @@ for i in range(n):
 # 因为是二维数组，所以体积的顺序正反都可以
 for i in range(n-1, -1, -1):  # good
     for j in range(1, m+1):   # volumn
-        dp[i][j] = dp[i+1][j]
-        if j >= v_lst[i]:
+        dp[i][j] = dp[i+1][j]  # 重要
+        if j >= v_lst[i]:  # 注意等号
             dp[i][j] = max(dp[i][j], dp[i+1][j-v_lst[i]]+w_lst[i])
 
 cur_v = m

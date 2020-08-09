@@ -13,13 +13,17 @@ dp = [0 for i in range(1+V)]
 for i in range(N):  # 每一组物品
     s = int(input())  # 商品数
     w_lst, v_lst = [], []
-    for j in range(s):  # 组内的每一件物品
+    for j in range(s):  # 必须对一组的物品暂存，贪心
         (vi, wi) = list(map(int, input().split()))
         w_lst.append(wi)
         v_lst.append(vi)
     for v in range(V, -1, -1):  # 遍历背包体积
         for k in range(len(w_lst)):  # 遍历物品
-            # 固定体积后，选择最佳的物品
-            if v-v_lst[k] >0: dp[v] = max(dp[v], dp[v-v_lst[k]]+w_lst[k])
+            # 此处与01背包的区别在于对一个体积位，考虑组内所有的物品
+            if v-v_lst[k] > 0:
+                dp[v] = max(dp[v], dp[v-v_lst[k]]+w_lst[k])
 print(dp[-1])
+
+
+
 
