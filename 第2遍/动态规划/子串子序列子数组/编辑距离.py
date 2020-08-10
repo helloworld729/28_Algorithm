@@ -9,38 +9,35 @@
 horse -> rorse (将 'h' 替换为 'r')
 rorse -> rose (删除 'r')
 rose -> ros (删除 'e')
-
+D[i][j]:A的前i个字母和B的前j个字母之间的编辑距离
 # 边界情况：与空串比较
+dp[i][j] = min(
+dp[i-1][j]        # 和线面的同理
+dp[i][j-1]+1      假如已知和第二个单词前j-1长度的距离，那么在第一单词后面添加单词2的最后一个char即可|或者第二单词删除
+dp[i-1][j-1]+1/0  对应修改操作，已知两单词都后退一步的距离，那么最后一个单词如果相同则距离不变，否则加一
+虽然说，提供了三个上界，但是子问题包含了所有的可能，只要边界计算正确，一定有一个最小值。
+)
 """
 
 class Solution:
     def minDistance(self, word1, word2):
-        n = len(word1)
-        m = len(word2)
+        # 用第一个单词构建行，第二个单词构建列
+        l1, l2 = len(word1), len(word2)
+        if not l1 * l2: return max(l1, l2)
+        dp = [[0 for _ in range(l2+1)] for _ in range(l1+1)]
 
-        # 有一个字符串为空串
-        if n * m == 0:
-            return n + m
+        # boundary process
+        for i in range(l1+1): dp[i][0] = i
+        for j in range(l2+1): dp[0][j] = j
 
-        # DP 数组
-        D = [[0] * (m + 1) for _ in range(n + 1)]  # 第一个单词构建行
+        for i in range(1, l1+1):
+            for j in range(1, l2+1):
+                first_add = dp[i-1][j] + 1
+                first_del = dp[i][j-1] + 1
+                k = 0 if word1[i-1] == word2[j-1] else 1
+                first_change = dp[i-1][j-1] + k
+                dp[i][j] = min(first_add, first_del, first_change)
 
-        # 边界状态初始化
-        for i in range(n + 1):  # 第0列初始化为行号
-            D[i][0] = i
-        for j in range(m + 1):  # 第0行初始化为列号
-            D[0][j] = j
-
-        # 计算所有 DP 值
-        for i in range(1, n + 1):  # 第一个单词 行
-            for j in range(1, m + 1):  # 第二个单词 列
-                left = D[i - 1][j] + 1  # 删除第二个单词
-                down = D[i][j - 1] + 1  #
-                left_down = D[i - 1][j - 1]
-                if word1[i - 1] != word2[j - 1]:
-                    left_down += 1
-                D[i][j] = min(left, down, left_down)
-
-        return D[n][m]
+        return dp[-1][-1]
 
 # 状态转移==>选择有哪几个
