@@ -1,15 +1,16 @@
 import heapq
 lst = [7, 2, 5, 7, 3, 4]
 # ##################### 第一种方式 ###################################
-h = []  # 堆容器
-for i in lst:
-    heapq.heappush(h, i)  # 入堆
-print(heapq.heappop(h))   # 出堆
-print(heapq.nsmallest(2, h))  # 最大的前n个数（不推荐）
-print(heapq.nlargest(2, h))   # 最小的前n个数
+# h = []  # 堆容器
+# for i in lst:
+#     heapq.heappush(h, i)  # 入堆
+# print(heapq.heappop(h))   # 出堆
+# print(heapq.nsmallest(2, h))  # 最大的前n个数（不推荐）
+# print(heapq.nlargest(2, h))   # 最小的前n个数
 
 # ##################### 第二种方式 ###################################
 heapq.heapify(lst)
+# lst.heappush(6)
 print(heapq.heappop(lst))
 print(heapq.nsmallest(2, lst))
 print(heapq.nlargest(2, lst))
