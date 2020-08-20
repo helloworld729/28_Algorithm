@@ -2,18 +2,20 @@
 # https://leetcode-cn.com/problems/xu-lie-hua-er-cha-shu-lcof/submissions/
 # 小结：对序列化列表分割首选re.sub，因为可以针对,和[]分割，注意首尾为空
 # index规则，null_mem。
+import re
+from collections import deque
+
 class TreeNode(object):
     def __init__(self, x):
         self.val = x
         self.left = None
         self.right = None
-import re
-from collections import deque
 
 class Codec:
-    def serialize(self, root):
+    def serialize(self, root):  # root-->str
         if not root:
             return "[]"
+        # 返回值，处理队列
         res, que = [], deque()
         que.append(root)
         while len(que) > 0:
