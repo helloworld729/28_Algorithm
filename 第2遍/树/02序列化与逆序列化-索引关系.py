@@ -18,36 +18,29 @@ class Codec:
         # 返回值，处理队列
         res, que = [], deque()
         que.append(root)
-        while len(que) > 0:
-            root = que.popleft()
-            if root == "null":
-                res.append("null")
-            else:
-                res.append(str(root.val))
-                left = root.left if root.left else "null"
-                que.append(left)
-                right = root.right if root.right else "null"
-                que.append(right)
+        while que:
+            node = que.popleft()
+            if node:
+                res.append(str(node.val))
+                que.append(node.left)
+                que.append(node.right)
+            else: res.append("null")
 
         while res[-1] == "null":
             res.pop()
 
         res = "[" + ",".join(res) + "]"
-        # print(res)
         return res
 
     def deserialize(self, data):  # str到root
-        if data == "[]":
-            return []
+        if data == "[]":  return []
         null_count = 0
-        data = re.split(r",|\[|\]", data)
-        data = data[1:-1]
+        data = data[1:-1].split(",")
 
         def to_node(num): return "null" if num == "null" else TreeNode(int(num))
         node_list = list(map(to_node, data))
 
         for index, node in enumerate(node_list):
-            # print(index)
             if node == "null":
                 null_count += 1
                 continue
@@ -64,6 +57,7 @@ class Codec:
             node.right = right if right != "null" else None
         return node_list[0]
 
-# Your Codec object will be instantiated and called as such:
-# codec = Codec()
-# codec.deserialize(codec.serialize(root))
+lst = "[1,2,3,null,null,4,5,6,7]"
+a = Codec()
+print(a.serialize(a.deserialize(lst)))
+

@@ -17,6 +17,26 @@
 4、递归
 链接：https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal
 """
+from collections import deque
+def serialize(root):
+    if not root: return "[]"
+    queue = deque()
+    queue.append(root)
+    res = []
+    while queue:
+        node = queue.popleft()
+        if node:
+            res.append(str(node.val))
+            queue.append(node.left)
+            queue.append(node.right)
+        else:
+            res.append("null")
+
+    while res[-1] == "null":
+        res.pop()
+
+    return '[' + ','.join(res) + ']'
+
 # Definition for a binary tree node.
 class TreeNode:
     def __init__(self, x):
@@ -25,21 +45,38 @@ class TreeNode:
         self.right = None
 
 class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        if not postorder: return None
-        root = TreeNode(postorder[-1])
-        if len(postorder) == 1: return root
+    def buildTree(self, inorder, postorder) -> TreeNode:
+        if not postorder: return None  # 必备边界条件
+        root_val = postorder[-1]
+        if len(postorder) == 1:        # 可选边界条件
+            return TreeNode(root_val)
 
-        root_index = inorder.index(postorder[-1])  # 根节点在中序的索引
-        right_len = len(inorder)-root_index-1  # 右子树的长度
+        root = TreeNode(root_val)
+        cut = inorder.index(root_val)
 
-        left_in = inorder[: root_index]
-        right_in = inorder[root_index: ]
-        left_post = postorder[:-1-right_len]
-        right_post = postorder[-1-right_len: -1]
+        left_in = inorder[:cut]
+        right_in = inorder[cut+1:]  # 可能越界，但是列表切片不会报错，会返回空表，所以不用担心
+        left_post = postorder[:cut]
+        right_post = postorder[cut:-1]
 
         root.left = self.buildTree(left_in, left_post)
         root.right = self.buildTree(right_in, right_post)
 
         return root
+
+
+inorder = [9,3,15,20,7]
+postorder = [9,15,7,20,3]
+a = Solution()
+root = a.buildTree(inorder, postorder)
+res = serialize(root)
+print(res)
+
+
+
+"""
+边界条件：1、判空 例如根节点为1，只有一个左后继为2，此时右树为空
+边界条件：2、单点树可以不用判断，但是如果判断可以加速
+"""
+
 

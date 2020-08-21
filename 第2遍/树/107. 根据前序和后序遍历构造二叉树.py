@@ -4,7 +4,7 @@
  pre 和 post 遍历中的值是不同的正整数。
 输入：pre = [1,2,4,5,3,6,7], post = [4,5,2,6,7,3,1]
 输出：[1,2,3,4,5,6,7]
-思路：左子树在先序的index(1)，结合后续可以切出左子树和右子树
+思路：认为先序遍历的第二个节点为左子树单节点，左子树在先序的index(1)，结合后续可以切出左子树和右子树
 改进：用索引代替列表切片(浅拷贝)
 提示：
 1 <= pre.length == post.length <= 30
@@ -12,6 +12,27 @@ pre[] 和 post[] 都是 1, 2, ..., pre.length 的排列
 每个输入保证至少有一个答案。如果有多个答案，可以返回其中一个。
 https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
 """
+from collections import deque
+
+def serialize(root):
+    if not root: return "[]"
+    queue = deque()
+    queue.append(root)
+    res = []
+    while queue:
+        node = queue.popleft()
+        if node:
+            res.append(str(node.val))
+            queue.append(node.left)
+            queue.append(node.right)
+        else:
+            res.append("null")
+
+    while res[-1] == "null":
+        res.pop()
+
+    return '[' + ','.join(res) + ']'
+
 # Definition for a binary tree node.
 class TreeNode:
     def __init__(self, x):
@@ -20,7 +41,7 @@ class TreeNode:
         self.right = None
 
 class Solution:
-    def constructFromPrePost(self, pre: List[int], post: List[int]) -> TreeNode:
+    def constructFromPrePost(self, pre, post) -> TreeNode:
         if not pre: return None
         root = TreeNode(pre[0])
 
@@ -40,3 +61,10 @@ class Solution:
         root.left = self.constructFromPrePost(left_pre, left_post)
         root.right = self.constructFromPrePost(right_pre, right_post)
         return root
+
+inorder = [9,3,15,20,7]
+postorder = [9,15,7,20,3]
+a = Solution()
+root = a.buildTree(inorder, postorder)
+res = serialize(root)
+print(res)
