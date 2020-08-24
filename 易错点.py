@@ -17,6 +17,15 @@ print(a, b)  # 2 4
 # 广度优先搜索用队列，注意popleft
 # 深度优先搜索一般用到全局变量
 
+a = 0
+def ddd():  # 变量的搜索
+    b = a+1
+    return b
+print(ddd())
+
+a = []
+a.append(None)
+print(a, len(a))
 
 
 

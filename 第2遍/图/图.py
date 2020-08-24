@@ -215,6 +215,7 @@ def findItinerary(tickets):
     for key in adjacent.keys():
         adjacent[key].sort(reverse=True)
     all_plans = []
+
     def dfs(pos_now):
         while adjacent[pos_now]:
             pos_next = adjacent[pos_now].pop()
@@ -222,7 +223,9 @@ def findItinerary(tickets):
         all_plans.append(pos_now)
     dfs("JFK")
     return all_plans[::-1]
+
 # tickets =  [["JFK", "C"], ["JFK", "B"], ["C", "JFK"], ]
 # tickets =  [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
-# res = findItinerary(tickets)
-# print(res)
+tickets =  [["JFK","SFO"],["JFK","WTL"],["WTL","JFK"]]
+res = findItinerary(tickets)
+print(res)
