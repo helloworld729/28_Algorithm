@@ -11,9 +11,10 @@ lst = [7, 2, 5, 7, 3, 4]
 # ##################### 第二种方式 ###################################
 heapq.heapify(lst)
 # lst.heappush(6)
-print(heapq.heappop(lst))
-print(heapq.nsmallest(2, lst))
-print(heapq.nlargest(2, lst))
+for i in range(len(lst)):
+    print(heapq.heappop(lst))
+# print(heapq.nsmallest(2, lst))
+# print(heapq.nlargest(2, lst))
 # ######################### 小结 ######################################
 # heapify 将lst转化为堆，如果lst已经是正常堆序列，那么可以没有这一步
 # 假如lst不是堆序，又没有heapify那么结果是错的。
