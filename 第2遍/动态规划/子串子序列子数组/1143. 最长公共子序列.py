@@ -9,10 +9,6 @@
 输入：text1 = "abcde", text2 = "ace"
 输出：3
 解释：最长公共子序列是 "ace"，它的长度为 3。
-
-思路：转移公式
-dp[i,j] = dp[i+1][j+1]  # 相等
-dp[i,j] = max(dp[i, j+1],dp[i+1, j])  # 不相等
 """
 class Solution:
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
@@ -26,3 +22,14 @@ class Solution:
                 else:
                     dp[i][j] = max(dp[i][j+1], dp[i+1][j])
         return dp[0][0]
+
+"""
+状态：dp[i][j]:单词2的第i个位置以及之后的序列化中，与第1个单词第j个位置之后的序列化中
+      最长的公共长度。
+递推：
+dp[i,j] = dp[i+1][j+1] + 1            # 相等
+dp[i,j] = max(dp[i, j+1],dp[i+1, j])  # 不相等
+
+边界：直接在最后和最右边补0，反之边界溢出的处理。
+返回：dp[0][0]
+"""

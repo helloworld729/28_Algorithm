@@ -1,11 +1,8 @@
 """
 "bbbab"
 输出:4 一个可能的最长回文子序列为 "bbbb"。
-
 状态定义：dp[i, j]:在i-->j区间
 """
-
-
 class Solution:
     def longestPalindromeSubseq(self, s: str) -> int:
         ll = len(s)

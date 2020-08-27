@@ -13,14 +13,18 @@
 class Solution:
     def checkSubarraySum(self, nums, k: int) -> bool:
         if len(nums) < 2: return False
-        dp, cur_sum = {0: -1}, 0
+        dp, cur_sum = {0: -1}, 0  #　余数：索引
 
         for index, num in enumerate(nums):
             cur_sum += num  # 前缀和
-            rest = cur_sum if k == 0 else cur_sum % k
-            pre = dp.setdefault(rest, index)
+            rest = cur_sum if k == 0 else cur_sum % k  # 求余数
+            pre = dp.setdefault(rest, index)  # 上一个相同余数的索引
             if index - pre > 1: return True
         return False
 
+"""
+和为0的特殊处理：假如k为0的话，那么有一段区间的和为0，那么区间前后的前缀和相等，
+    所以可以直接把前缀和作为余数记录。
 
+"""
 
