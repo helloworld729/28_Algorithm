@@ -14,12 +14,12 @@ class Solution:
 
         dp = [[float("-inf") for _ in range(2)]for _ in range(k+1)]  # 注意1+k
 
-        dp[1][1] = -prices[0]
+        dp[1][1] = -prices[0]  # 如果k不加1而且k=1事后在这里会越界
         dp[0][0] = 0  # base case
 
         for i in range(1, ll):
             for j in range(1, k+1):
-                dp[j][0] = max(dp[j][0],             dp[j][1]+prices[i])
+                dp[j][0] = max(dp[j][1] + prices[i], dp[j][0])
                 dp[j][1] = max(dp[j-1][0]-prices[i], dp[j][1])
 
         return max([i[0] for i in dp])
@@ -37,4 +37,12 @@ ll=2，K最大为1
 思路1：时间O(KN)空间O(K)  
 思路2：时间O(N)空间O(1)
 所以选择思路2
+动态规划：dp[i][j]:表示已经完成第i笔交易，而且状态为j获取的最大收益，j取值为0和1分别表示
+          空仓和持仓
+                dp[j][0] = max(dp[j][1] + prices[i], dp[j][0])
+                dp[j][1] = max(dp[j-1][0]-prices[i], dp[j][1])
+          假如没有进行状态压缩的话，最初的动规为：
+                dp[i][j][0] = max(dp[i-1][j][1] + prices[i], dp[i-1][j][0])
+                dp[i][j][1] = max(dp[i-1][j-1][0]-prices[i], dp[i-1][j][1])
+          我们可以发现：i来自于直接前驱可以去掉
 """

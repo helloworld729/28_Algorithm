@@ -23,6 +23,44 @@ class Solution:
             two_out = max(two_in + increase, two_out)
             two_in  = max(two_in + increase, one_out)
             one_out = max(one_in + increase, one_out)
-            one_in  = max(one_in + increase, 0)
+            one_in  = max(one_in + increase, 0)  # 第一项表示前面已经购买，只是维持，第二项表示真的第一次购买
+
             res = max(res, one_out, two_out)
         return max(0, res)
+
+    def maxProfit2(self, prices) -> int:
+        ll = len(prices)
+        if ll <2: return 0
+        if ll == 2: return max(0, prices[1]-prices[0])
+        one_in, res = -prices[0], float("-inf")
+        one_out = two_in = two_out = float("-inf")
+
+        for i in range(1, ll):
+            two_out = max(two_in + prices[i], two_out)
+            two_in  = max(two_in, one_out - prices[i])
+            one_out = max(one_in + prices[i], one_out)
+            one_in  = max(one_in, -prices[i])  # 第一项表示前面已经购买，只是维持，第二项表示真的第一次购买
+        res = max(res, one_out, two_out)
+        return max(0, res)
+    
+    def maxProfit3(self, prices) -> int:
+        ll = len(prices)
+        if ll <2: return 0
+        if ll == 2: return max(0, prices[1]-prices[0])
+        one_in, res = -prices[0], float("-inf")
+        one_out = two_in = two_out = float("-inf")
+
+        for i in range(1, ll):
+            two_out = max(two_in + prices[i], two_out)
+            two_in  = max(two_in, one_out - prices[i])
+            one_out = max(one_in + prices[i], one_out)
+            one_in  = max(one_in, -prices[i])  # 第一项表示前面已经购买，只是维持，第二项表示真的第一次购买
+        res = max(res, one_out, two_out)
+        return max(0, res)
+
+
+
+a = Solution()
+lst = [3,3,5,3]
+print(a.maxProfit2(lst))
+
