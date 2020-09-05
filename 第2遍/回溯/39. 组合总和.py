@@ -1,18 +1,7 @@
-"""
-给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
-
-candidates 中的数字可以无限制重复被选取。
-所有数字（包括 target）都是正整数。
-解集不能包含重复的组合。 
-输入：candidates = [2,3,6,7], target = 7,
-所求解集为：
-[  [7],  [2,2,3]]
-链接：https://leetcode-cn.com/problems/combination-sum
-
-方法：为了避免重复，只能考虑后面的数字，
-"""
+"""无重复数组 + 元素无限使用 + 解集不能重复"""
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+    def combinationSum(self, candidates, target: int):
+        """迭代解法"""
         res = []
         st = []
         ll = len(candidates)
@@ -30,3 +19,37 @@ class Solution:
                     if num <= need:
                         st.append([combine+[num], need - num, j])
         return res
+
+    def combinationSum2(self, candidates, target):
+        """递归模板解法"""
+        result = []  # 排列组合出所有的可能
+        candidates.sort()  # 排序
+
+        def advanced(have, cans, have_sum):
+            ll = len(cans)
+            if have_sum == target:
+                result.append(list(have))
+                return
+
+            # visited = {}
+            for i in range(ll):
+                # if cans[i] in visited:
+                #     continue
+                if have_sum + cans[i] > target:  # 剪枝
+                    break
+                # visited[cans[i]] = 1
+                have.append(cans[i])
+                advanced(have, cans[i:], have_sum + cans[i])  # 从当前index考虑
+                have.pop()
+
+        advanced([], candidates, 0)
+        return result
+
+
+"""
+输入：candidates = [2,3,6,7], target = 7,
+所求解集为：[ [7], [2,2,3]]
+
+无重复：不用哈希
+无限使用 + 结果去重：考虑从当前index到末尾
+"""

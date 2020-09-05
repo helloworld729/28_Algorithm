@@ -2,7 +2,6 @@ class Solution:  # 回溯做法
     def permutation(self, S: str):
         ll = len(S)
         if not ll: return [""]  # 不是空集
-        # if ll == 1: return [S]
 
         res = []
         for i in range(ll):
@@ -13,4 +12,7 @@ class Solution:  # 回溯做法
         return res
 
 a = Solution()
-print(a.permutation("abc"))
+print(a.permutation("abb"))
+
+# 思想:选择s[i]作为当前的第一个单词，其余的部分求排列
+

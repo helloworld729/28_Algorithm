@@ -27,5 +27,11 @@ a = []
 a.append(None)
 print(a, len(a))
 
+#
+a = [1,2,3]
+b = []
+b.append(a)
+a.pop()
+print(b)  # [1,2]
 
 
