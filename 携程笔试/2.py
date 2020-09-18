@@ -28,4 +28,5 @@ def get_result(nums):
         res.append(data)
     return res
 
-print(get_result(construct(row=r, cline=c)))
+for data in get_result(construct(row=r, cline=c)):
+    print(data)

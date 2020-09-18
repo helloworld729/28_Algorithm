@@ -22,8 +22,12 @@ class Solution:
         return res
 
     def largestRectangleArea2(self, heights) -> int:
+        # 假设heights的首元素不为0，那么就有 栈被弹空的可能性
+        # 一旦栈被弹空，那么就会增加边界讨论，为了避免此情况
+        # 可以人为的添加一个下限值，使得stack永远不会被弹空
+        # 所以添加左哨兵，添加右哨兵使得所有的高度都被计算掉
         heights = [0] + heights + [0]
-        st = [0]
+        st = []
         res = 0
         for i in range(len(heights)):
             if st and heights[i] < heights[st[-1]]:
@@ -33,11 +37,12 @@ class Solution:
                     w = i - st[-1] - 1
                     res = max(res, h*w)
             st.append(i)
+        # print(st)
         return res
 
 height = [2,1,5,6,2,3]
 a = Solution()
-print(a.largestRectangleArea(height))
+print(a.largestRectangleArea2(height))
 
 
 """
