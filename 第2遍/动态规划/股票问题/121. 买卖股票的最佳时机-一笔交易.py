@@ -15,18 +15,6 @@
 """
 class Solution:
     def maxProfit(self, prices) -> int:
-        """DP[i]:表示到当前日期的最大利润，O（N2）超时"""
-        ll = len(prices)
-        if ll <= 1: return 0
-        res = 0
-        dp = [0] *ll
-        for i in range(1, ll):
-            for j in range(i):
-                if prices[i] - prices[j] > dp[i]:
-                    dp[i] = prices[i] - prices[j]
-            res = max(res, dp[i])
-        return res
-    def maxProfit2(self, prices) -> int:
         """DP首先定义 到当前日期的最低股票价格，然后对差值去一个最大贪心 O(N)"""
         ll = len(prices)
         if ll <= 1: return 0

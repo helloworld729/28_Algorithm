@@ -12,15 +12,15 @@ class Solution:
             self.res.append(answer)
 
         def dfs(columns, left, right, row, index):
-            if row == n:
+            if row == n:  # 所有行定位完毕
                 gene_board(index)
                 return
 
-            for i in range(n):
+            for i in range(n):  # 列选择
                 if i in columns or i + row in left or i - row in right:
                     continue
-                columns.add(i)      # 将皇后放在第i列
-                index.append(i)     # 列放到index中
+                columns.add(i)      # 将皇后放在第i列(存入hash-set)
+                index.append(i)     # 列放到index中(保证列假如的顺序)
                 left.add(i + row)   # 所有左下的共同点是 行 + 列 相等
                 right.add(i - row)  # 所有右下的共同点是 列 - 行 相等
                 dfs(columns, left, right, row+1, index)
