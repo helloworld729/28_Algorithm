@@ -43,6 +43,19 @@ class Solution:
         res = max(res, one_out, two_out)
         return max(0, res)
 
+    def maxProfit3(self, prices) -> float:
+        ll = len(prices)
+        if ll < 2: return 0
+        # 内层两个状态表示空仓、持仓，外层表示交易次数
+        dp = [[float("-inf") for i in range(2)] for j in range(3)]
+        dp[0][0] = 0
+
+        for i in range(ll):
+            for j in range(1, 3):
+                dp[j][0] = max(dp[j][0], dp[j][1] + prices[i])  # 维持或者卖出
+                dp[j][1] = max(dp[j][1], dp[j - 1][0] - prices[i])  # 维持或者买入
+        return max([i[0] for i in dp])
+
 
 a = Solution()
 lst = [3, 3, 5, 3]
@@ -50,4 +63,4 @@ print(a.maxProfit2(lst))
 
 
 # 方法1：价值包括两部分：手里面的前 + 金子的价值
-# 方法2：价值包含一部分：手里面的钱
+# 方法2、3：价值包含一部分：手里面的钱，其中方法3是可以扩展为K笔交易，方法2是只有两笔交易的简化做法

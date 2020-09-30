@@ -1,13 +1,20 @@
 class Solution:
     def maxProfit(self, prices) -> int:
-        """比手续费 增加一个状态"""
         ll = len(prices)
         if ll < 2: return 0
-        empty, frozen, hold = 0, 0, 0
+        empty, frozen, hold = 0, float("-inf"), -prices[0]
         for i in range(1, ll):
-            new_hold = prices[i]-prices[i-1] + hold
-            empty_back = empty
-            empty = max(empty,  frozen)  # right
-            frozen = new_hold
-            hold =  max(empty_back,  new_hold)      # right
+            temp = frozen
+            frozen = hold + prices[i]  # 卖掉持有
+            hold = max(hold, empty-prices[i])
+            empty = max(empty, temp)
         return max(empty, frozen)
+
+
+# 持仓 <-- 持仓、空仓
+# 空仓 <-- 空仓、冷冻
+# 冷冻 <-- 持仓
+# 持仓只能来自：持仓、空仓
+# 冷冻只能来自于：持仓，换句话说冷冻不能自己传递到自己
+# hold->frozen-empty-hold # 必须借助temp
+
