@@ -9,4 +9,6 @@ def left_sect(value):
         else:
             r = middle
     return l
-
+value = 4
+lst.insert(left_sect(value), value)
+print(lst)
