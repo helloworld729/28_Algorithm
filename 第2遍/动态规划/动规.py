@@ -61,12 +61,6 @@ def uniquePaths2(m: int, n: int) -> int:
         return search(i, j+1) + search(i+1, j)
     return search(0,0)
 
-# print(uniquePaths2(6,5))
-
-
-
-# 20200728
-
 
 
 
