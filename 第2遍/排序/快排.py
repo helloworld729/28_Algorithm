@@ -25,11 +25,13 @@ def q_sort0(lst, l, r):
             j -= 1
     lst[i] = pivot  # 跳出循环后i==j，为pivot的正确位置
 
-    q_sort0(lst, l, i-1)  # 递归推进，左侧快排，因为lst改变所以递归推进放到后面
+    q_sort0(lst, l, i-1)  # 递归推进，左侧快排，
     q_sort0(lst, i+1, r)  # 递归推进，右侧快排，
 
     return lst
-
+# 值得注意的地方：推进的过程中要跳过i，否则会陷入死循环之中
+# 例如右侧推进的时候如果是从i到r，那么由于i已经是最小，而每次又选择首元素作为pivot那么
+# 每一次partition都不会变。
 
 def q_sort(lst, l, r, k):
     """
