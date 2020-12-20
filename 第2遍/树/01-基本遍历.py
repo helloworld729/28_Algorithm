@@ -1,136 +1,90 @@
-from collections import deque
+# -*- coding:utf-8 -*-
+# Author:Knight
+# @Time:2020/12/20 19:57
 
 class BinTNode():
     def __init__(self, data, left=None, right=None):
-        self.data = data
+        self.val = data
         self.left = left
         self.right = right
 
-def count_BinTNode(t):
-    if t is None:
-        return 0
-    else:
-        total = 1 + count_BinTNode(t.left) + count_BinTNode(t.right)
-    return total
+root = BinTNode(1, BinTNode(2, BinTNode(4), BinTNode(5)),
+                BinTNode(3, BinTNode(6), None))
 
-total = 0
-def count_BinTNode2(t):
-    if t is None:  # 边界条件
-        return
-    else:
-        global total
-        total += 1
-        count_BinTNode2(t.left)
-        count_BinTNode2(t.right)
+def preOrder(root, lst):
+    # 把以 root为根节点的树 的 先序遍历 结果放到lst中
+    if root is None: return
+    lst.append(root.val)
+    preOrder(root.left, lst)
+    preOrder(root.right,lst)
 
-def sum_BinTNode(t):
-    if t is None:
-        return 0
-    else:
-        return t.data + sum_BinTNode(t.letf) + sum_BinTNode(t.right)
+def midOrder(root, lst):
+    # 把以root为根节点的数的中序遍历结果填充到lst中
+    if not root: return
+    midOrder(root.left, lst)
+    lst.append(root.val)
+    midOrder(root.right, lst)
 
-def pre_order(root, lst=[]):
-    if root is None:  # 边界条件
-        return
-    lst.append(root.data)  # 处理方法
-    pre_order(root.left)   # 递归推进
-    pre_order(root.right)  # 递归推进
-    return lst
+def postOrder(root, lst):
+    # 把以root为根节点的树的后序遍历 填充到 lst中
+    if not root: return
+    postOrder(root.left, lst)
+    postOrder(root.right, lst)
+    lst.append(root.val)
 
-def mid_order(t, lst=[]):
-    if t is None:
-        return
-    mid_order(t.left)  # 处理左子树
-    lst.append(t.data)  # 处理自己
-    mid_order(t.right)  # 处理右子树
-    return lst
+def preOrder2(root):
+    # 根节点存入结果
+    # 右节点入栈，左结点入栈
+    if root is None: return []
+    result = []
+    cans = [root]
+    while cans:
+        root = cans.pop()
+        if root:
+            result.append(root.val)
+            cans.append(root.right)
+            cans.append(root.left)
+    return result
 
-def last_order(t, lst=[]):
-    if t is None:
-        return
-    last_order(t.left)
-    last_order(t.right)
-    lst.append(t.data)
-    return lst
-
-def level_order(root):
+def midOrder2(root):
     res = []
-    if root is None:
-        return
-    que = deque()
-    que.append(root)
-    while que:
-        temp = que.popleft()
-        res.append(temp.data)
-        if temp.left is not None:
-            que.append(temp.left)
-        if temp.right is not None:
-            que.append(temp.right)
-    return res
-
-def preorder_elements(t):
-    s= []
-    s.append(t)
-    while len(s) > 0:
-        t = s.pop()
-        while t is not None:
-            yield t.data
-            s.append(t.right)
-            t = t.left
-
-def preorder_nonrec(root):
-    # 压入右结点， 读左结点
-    res, st = [], []
-    st.append(root)
-    while st:
-        root = st.pop()
-        while root is not None:
-            res.append(root.data)  # 先干为敬,nikeruzhan
-            st.append(root.right)
+    cans = []
+    while root or cans:
+        while root:
+            cans.append(root)
             root = root.left
+        node = cans.pop()
+        # 能弹出到本节点 说明左子树已经访问完毕
+        # 先访问本 根节点
+        res.append(node.val)
+        # 然后切换到右子树
+        root = node.right
     return res
 
-def midorder_nonrec(root):
-    res, st = [], []
-    while st or root is not None:
-        while root is not None:
-            st.append(root)
-            root = root.left
-
-        node = st.pop()
-        res.append(node.data)
-        root = node.right  # 刮风下雨，都会来右边看一看
-    return res
-
-def postorder_nonrec(root):
-    res, st = [], []
-    while st or root is not None:
-        while root is not None:
-            st.append(root)
+def postOrder2(root):
+    res = []
+    cans = []
+    while cans or root:
+        while root:
+            cans.append(root)
             root = root.left if root.left else root.right
-        node = st.pop()
-        res.append(node.data)
-        root = st[-1].right if node == st[-1].left else None  # 越俎代庖
+        # 访问到本节点，说明左右子树已经访问完毕
+        node = cans.pop()
+        res.append(node.val)
+        # 如果有右兄弟，就切换到右兄弟，否则为弹出 父节点左准备(另root为None)
+        root = cans[-1].right if cans and node == cans[-1].left else None
     return res
 
-root = BinTNode(0, BinTNode(1, BinTNode(3, BinTNode(7), BinTNode(8)),
-                BinTNode(4, BinTNode(9), None)), BinTNode(2, BinTNode(5),
-                BinTNode(6)))
 
-print('广度优先：', end='')
-print(level_order(root))
-print("")
-print('先序遍历：', end='')
-print(pre_order(root))
-print('先序遍历：', end='')
-print(preorder_nonrec(root))
-print('')
-print('中序遍历：', end='')
-print(mid_order(root))
-print('中序遍历：', end='')
-print(midorder_nonrec(root))
-print('')
-print('后序遍历：', end='')
-print(last_order(root))
-print('后序遍历：', end='')
-print(postorder_nonrec(root))
+pre, mid, post = list(), list(), list()
+preOrder(root, pre)
+midOrder(root, mid)
+postOrder(root, post)
+
+print(pre)
+print(preOrder2(root))
+print(mid)
+print(midOrder2(root))
+print(post)
+print(postOrder2(root))
+
