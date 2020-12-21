@@ -48,19 +48,19 @@ class Solution:
     def buildTree(self, inorder, postorder) -> TreeNode:
         if not postorder: return None  # 必备边界条件
         root_val = postorder[-1]
-        if len(postorder) == 1:        # 可选边界条件
-            return TreeNode(root_val)
-
         root = TreeNode(root_val)
+        # 求根节点的索引
         cut = inorder.index(root_val)
 
-        left_in = inorder[:cut]
-        right_in = inorder[cut+1:]  # 可能越界，但是列表切片不会报错，会返回空表，所以不用担心
-        left_post = postorder[:cut]
-        right_post = postorder[cut:-1]
+        in_left  = inorder[:cut]
+        # 可能越界，但是列表切片不会报错，会返回空表，所以不用担心
+        in_right = inorder[cut+1:]
+        # 中序左子树的长度适用于右子树
+        post_left  = postorder[:cut]
+        post_right = postorder[cut:-1]
 
-        root.left = self.buildTree(left_in, left_post)
-        root.right = self.buildTree(right_in, right_post)
+        root.left  = self.buildTree(in_left,  post_left)
+        root.right = self.buildTree(in_right, post_right)
 
         return root
 
