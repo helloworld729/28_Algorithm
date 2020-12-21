@@ -35,56 +35,51 @@ def postOrder(root, lst):
 def preOrder2(root):
     # 根节点存入结果
     # 右节点入栈，左结点入栈
-    if root is None: return []
-    result = []
+    res = list()
     cans = [root]
-    while cans:
+    while root or cans:
         root = cans.pop()
         if root:
-            result.append(root.val)
+            # 弹出本节点，说明根节点已经访问完毕
+            # 先访问本节点，然后右左压栈
+            res.append(root.val)
             cans.append(root.right)
             cans.append(root.left)
-    return result
+    return res
 
 def midOrder2(root):
+    # 中序：左 根 右
     res = []
     cans = []
     while root or cans:
-        while root:
+        while root is not None:
             cans.append(root)
             root = root.left
+        # 弹出本节点，说明本节点的左子树已经访问完毕
         node = cans.pop()
-        # 能弹出到本节点 说明左子树已经访问完毕
-        # 先访问本 根节点
+        # 先将本节点的val入栈
         res.append(node.val)
-        # 然后切换到右子树
+        # 再访问本节点的右节点
         root = node.right
     return res
 
 def postOrder2(root):
+    # 左-右-根
     res = []
     cans = []
-    while cans or root:
-        while root:
+    while root or cans:
+        while root is not None:
             cans.append(root)
             root = root.left if root.left else root.right
-        # 访问到本节点，说明左右子树已经访问完毕
+        # 弹出本节点，说明左子树访问完毕了，或者左右子树都访问完毕了
         node = cans.pop()
+        # 首先保存本节点的值
         res.append(node.val)
-        # 如果有右兄弟，就切换到右兄弟，否则为弹出 父节点左准备(另root为None)
-        root = cans[-1].right if cans and node == cans[-1].left else None
+        # 然后访问 右兄弟节点
+        root = cans[-1].right if cans and node is cans[-1].left else None
     return res
 
-
-pre, mid, post = list(), list(), list()
-preOrder(root, pre)
-midOrder(root, mid)
-postOrder(root, post)
-
-print(pre)
 print(preOrder2(root))
-print(mid)
 print(midOrder2(root))
-print(post)
 print(postOrder2(root))
-# 故意添加的
+
