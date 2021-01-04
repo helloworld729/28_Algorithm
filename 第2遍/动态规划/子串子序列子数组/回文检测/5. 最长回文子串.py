@@ -29,9 +29,9 @@ class Solution:
 
 # ################################# 中心扩展 #######################################
     def expandAroundCenter(self, s, left, right):
-        while left >= 0 and right < len(s) and s[left] == s[right]:
-            left -= 1
-            right += 1
+        # left, right 是可能的边界，不满足将边界收缩返回
+        while left >= 0 and right <= len(s)-1 and s[left] == s[right]:
+            left -= 1; right += 1
         return left + 1, right - 1
 
     def longestPalindrome2(self, s: str) -> str:
