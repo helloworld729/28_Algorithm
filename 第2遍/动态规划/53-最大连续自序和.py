@@ -1,4 +1,5 @@
 # ########################## 最大连续子序和 leetcode-53 ######################################
+from typing import List
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
         """O(N) O(1)"""

@@ -13,18 +13,32 @@
 class Solution:
     def checkSubarraySum(self, nums, k: int) -> bool:
         if len(nums) < 2: return False
-        dp, cur_sum = {0: -1}, 0  #　余数：索引
+        prefix = {0: -1}
 
-        for index, num in enumerate(nums):
-            cur_sum += num  # 前缀和
-            rest = cur_sum if k == 0 else cur_sum % k  # 求余数
-            pre = dp.setdefault(rest, index)  # 上一个相同余数的索引
-            if index - pre > 1: return True
-        return False
+        temp_sum = 0
+        for index, data in enumerate(nums):
+            temp_sum += data
+            rest = temp_sum if k == 0 else temp_sum % k
+
+            if rest in prefix:
+                pre = prefix[rest]
+                if index - pre >= 2:return True
+            else:
+                prefix[rest] = index
+
+            return False
+
+
 
 """
-和为0的特殊处理：假如k为0的话，那么有一段区间的和为0，那么区间前后的前缀和相等，
-    所以可以直接把前缀和作为余数记录。
+1、和为0的特殊处理：假如k为0的话，那么有一段区间的和为0，那么区间前后的前缀和相等，
+所以可以直接把前缀和作为余数记录。
+    
+2、为什么预设 余数为0在-1呢？假设刚好前两个数就满足要求，那么由于没有pre这个参数
+所以要预设
+
+3、假设前缀和取余已经为i，然后至少出现了两个数 a, b 这时候前缀和取余仍然是i
+所以index 距离大于等于2
 
 """
 

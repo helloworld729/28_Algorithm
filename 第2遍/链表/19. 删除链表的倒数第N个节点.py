@@ -6,16 +6,21 @@ class ListNode:
 
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        p = q = head  # 头部复制
-        while n > 0:  # 距离拉开
-            q = q.next
-            n -= 1
-        if not q: return head.next  # ！！！如果q已经为空，表示要删除的就是头结点
+        if not head: return head
 
-        while q.next is not None:  # 同步后移
-            p = p.next
-            q = q.next
-        p.next = p.next.next
+        # 思路：拉开距离 --> 一起移动
+        left = right = head
+        for i in range(n):
+            right = right.next
+        if not right:  # 如果right直接越界的话，说明要删头结点
+            return head.next
+
+        while right and right.next:
+            left = left.next
+            right = right.next
+
+        left.next = left.next.next
+
         return head
 
 # 查询一遍就把结果输出

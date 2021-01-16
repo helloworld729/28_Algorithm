@@ -43,7 +43,7 @@ class Solution:
                 d[pos] = n
         return len(d)
 
-lst = [1,3,4,2,6,10]
+lst = [1, 3, 4, 2, 6, 10]
 a = Solution()
 print(a.lengthOfLIS3(lst))
 

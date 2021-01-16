@@ -35,7 +35,16 @@ print(dict_a)  # {0: ['hello'], 1: ['hello'], 2: ['world']}
 
 # ############################ value=None ########################################
 # value为None，确实为None
-path = {i: None for i in range(1, 5+1)}
-print(path)
-print(path[1] is None)
+# path = {i: None for i in range(1, 5+1)}
+# print(path)
+# print(path[1] is None)
+# {1: None, 2: None, 3: None, 4: None, 5: None}
+# True
+# ############################ setdefault ########################################
+a = dict()
+a.setdefault("hello", "world")
+a.setdefault("hello", "world2")
+print(a)
+# {'hello': 'world'}
+# setdefault(k, v)就是说，有k的话把他取出来，没有的话设置为v
 

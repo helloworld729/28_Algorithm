@@ -32,4 +32,5 @@ def max_sames(s):
 s = "111101011"
 print(max_sames(s))
 
+# 用哈希表与前缀和
 

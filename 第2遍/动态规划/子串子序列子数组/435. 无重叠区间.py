@@ -14,6 +14,7 @@
 
 dp[i]:i个区间之前(包括i)的最多互不重叠区间的个数
 """
+from typing import List
 class Solution:
     def eraseOverlapIntervals(self, intervals) -> int:
         ll = len(intervals)
@@ -24,13 +25,39 @@ class Solution:
         intervals.sort(key=lambda x: x[1])
 
         for i in range(ll):
+            # 区间j的右边界 小
             for j in range(i-1, -1, -1):
-                # 如果区间i的左边界>区间j的右边界，那么长度加1
-                # 又因为排了序，前面不会有再长的上升区间长度，所以berak
+                # 如果区间i的左边界>区间j的右边界，那么长度加1，并且停止搜索
                 if intervals[i][0] >= intervals[j][1]:
                     dp[i] = max(dp[i], dp[j]+1)
                     break
+            # 假如没有搜寻到，那么保证随着i的增大，分立区间数不减
             dp[i] = max(dp[i], dp[i-1])
             max_len = max(max_len, dp[i])
 
         return ll - max_len
+
+    def eraseOverlapIntervals2(self, intervals: List[List[int]]) -> int:
+        length = len(intervals)
+        if length <= 1: return 0
+        # 按照左边界、区间长度排序
+        intervals.sort(key=lambda x: (x[0], x[1] - x[0]))
+
+        # 分立区间数目
+        count = 0
+        # 右边界
+        right = float("-inf")
+
+        for i in range(length):
+            if not count or intervals[i][0] >= right:
+                count += 1
+                right = intervals[i][1]
+            elif intervals[i][1] < right:
+                right = intervals[i][1]
+
+        return length - count
+
+    # 贪心：希望当前不重叠区间的右边界尽量小
+    # 首先排序后 如果新区间在不重叠右侧，直接加入
+    # 否则 如果新区间的右边界小 则替换。
+    # 类似的还有最长上升子序列
