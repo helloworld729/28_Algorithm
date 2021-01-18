@@ -1,11 +1,4 @@
-def q_sort0(lst, l, r):
-    """
-    快速排序
-    :param lst:待排列表
-    :param l: 左指针
-    :param r: 右指针
-    :return:
-    """
+def qSort(lst, l, r):
     if l >= r:  # 边界条件，只有一个元素
         return
 
@@ -25,57 +18,39 @@ def q_sort0(lst, l, r):
             j -= 1
     lst[i] = pivot  # 跳出循环后i==j，为pivot的正确位置
 
-    q_sort0(lst, l, i-1)  # 递归推进，左侧快排，
-    q_sort0(lst, i+1, r)  # 递归推进，右侧快排，
+    qSort(lst, l, i-1)  # 递归推进，左侧快排，
+    qSort(lst, i+1, r)  # 递归推进，右侧快排，
 
     return lst
+
 # 值得注意的地方：推进的过程中要跳过i，否则会陷入死循环之中
 # 例如右侧推进的时候如果是从i到r，那么由于i已经是最小，而每次又选择首元素作为pivot那么
 # 每一次partition都不会变。
 
-def q_sort(lst, l, r, k):
-    """
-    快速排序
-    :param lst:待排列表
-    :param l: 左指针
-    :param r: 右指针
-    :param k: 返回第K大的元素，如果pivot位置在k右边，那么右边的部分不用继续排序
-    :return:
-    """
-    if k <= 0:
-        return None
-    # l, r = 0, len(lst) - 1
-    if l >= r:  # 边界条件，只有一个元素
-        return lst[l]
+def numK(nums, l, r, k):
+    # 在区间[l, r]之间找到第k大的数字
+    if l > r: return
+    if l == r and len(nums) - l == k: return nums[l]
 
-    i, j = l, r  # l和r要控制递归
-    pivot = lst[i]  # 选取第一个元素作为pivot
-
-    while i < j:  # 处理办法：partition
-        while i < j and lst[j] >= pivot:  # 比基准大则左滑，小则停止, 第一个条件保证第一个数最小时数组不会越界
+    i, j = l, r
+    pivot = nums[i]
+    while i < j:
+        while i < j and nums[j] >= pivot:
             j -= 1
-        if i < j:  # 查距填坑
-            lst[i] = lst[j]
+        if i < j and nums[j] < pivot:
+            nums[i] = nums[j]
             i += 1
-        while i < j and lst[i] <= pivot:  # 比基准小则右滑，大则停止
+        while i < j and nums[i] <= pivot:
             i += 1
-        if i < j:  # 查距填坑
-            lst[j] = lst[i]
+        if i < j and nums[i] > pivot:
+            nums[j] = nums[i]
             j -= 1
-    lst[i] = pivot  # 跳出循环后i==j，为pivot的正确位置
+    nums[i] = pivot  # 还是需要的
 
-    if i == k - 1:
-        return lst[i]
-    elif i < k - 1:
-        return q_sort(lst, i+1, r, k)  # 递归推进，右侧快排，由于i和k都是全局的所以k不变
-    elif i > k - 1:
-        return q_sort(lst, l, i-1, k)  # 递归推进，左侧快排，因为lst改变所以递归推进放到后面
-
-
-a = [3,4,6,5]
-for i in range(1, len(a)+1):
-    result = q_sort(a,l=0,r=len(a)-1,k=i)
-    print(result)
+    pos = len(nums) - i  # 位置表示第几大
+    if pos == k: return nums[i]
+    elif pos < k: return numK(nums, l, i-1, k)
+    else: return numK(nums, i+1, r, k)
 
 """
 反向遍历的两种方法：

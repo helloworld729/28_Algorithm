@@ -7,40 +7,40 @@ class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
+
+
 class Solution:
     def sortList(self, head: ListNode) -> ListNode:
         # 找到中间节点
         # 归并算法
+        def merge(head1, head2):
+            p = q = ListNode(0)
+            while head1 and head2:
+                if head1.val < head2.val:
+                    q.next = head1
+                    q, head1 = q.next, head1.next
+                else:
+                    q.next = head2
+                    q, head2 = q.next, head2.next
 
-        def getMidPoint(head: ListNode):
-            # 快慢指针 获取中间节点
-            if not head: return None
-            slow, fast = head, head.next  # 慢指针在前
+            q.next = head2 if not head1 else head1
+            return p.next
+
+        def getMid(head):
+            fast, slow = head.next, head
             while fast and fast.next:
                 slow, fast = slow.next, fast.next.next
-            mid, slow.next = slow.next, None
-            return mid
-
-        def merge(formmer, latter):
-            node = ListNode(0)
-            res = node
-            while formmer or latter:
-                if formmer and latter:
-                    if formmer.val > latter.val: node.next, latter = latter, latter.next
-                    else: node.next, formmer = formmer, formmer.next
-                    node, node.next = node.next, None
-                else:
-                    node.next = formmer if formmer else latter
-                    break
-            return res.next
+            fast = slow.next
+            slow.next = None
+            return head, fast
 
         if not head or not head.next: return head
 
-        latter = getMidPoint(head)
-        formmer, latter = self.sortList(head), self.sortList(latter)
-        node = merge(formmer, latter)
+        left, right = getMid(head)
+        left = self.sortList(left)
+        right = self.sortList(right)
 
-        return node
+        return merge(left, right)
 
 a = ListNode(val=4, next=ListNode(val=2, next=ListNode(1, next=ListNode(5, None))))
 res = Solution()
