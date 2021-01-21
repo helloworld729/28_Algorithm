@@ -14,6 +14,7 @@ class Solution:
                         res += w*h
             st.append(i)
         return res
+
     def trap2(self, height) -> int:
         res = 0
         ll = len(height)
@@ -41,8 +42,6 @@ class Solution:
                 res += right_max - height[right]
                 right -= 1
         return res
-
-
 
 
 height = [0,1,0,2,1,0,1,3,2,1,2,1]

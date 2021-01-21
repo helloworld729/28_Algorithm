@@ -5,7 +5,7 @@ class Solution:  # 回溯做法
 
         res = []
         for i in range(ll):
-            if S[i] in S[:i]:
+            if S[i] in S[:i]:  # 就加这一句话
                 continue
             for sub in self.permutation(S[:i] + S[i+1:]):
                 res.append(S[i] + sub)
