@@ -19,15 +19,18 @@ def max_same(nums):
 
 def max_sames(s):
     prefix = {0:-1}
-    temp = 0
-    l, r = 0, 0
+    # temp 是前缀和
+    temp = l = r = 0
     for i in range(len(s)):
         temp += 1 if s[i] == "1" else -1
-        if temp in prefix and i - prefix[temp] > r - l:
-            l, r = prefix[temp] + 1, i  # 左边界要叫1
+        if temp in prefix and \
+                i - prefix[temp] > r - l:
+            # 左边界要 + 1
+            l, r = prefix[temp] + 1, i
         else:
             prefix[temp] = i
     return s[l: 1+r] if l != r else None
+
 
 s = "111101011"
 print(max_sames(s))
