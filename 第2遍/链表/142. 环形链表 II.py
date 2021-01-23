@@ -3,20 +3,21 @@ class ListNode:
         self.val = x
         self.next = None
 
+
 class Solution(object):
     def detectCycle(self, head):
-        fast, slow = head, head
+        # 首先，检测是否有环路
+        slow, fast = head, head
         while True:
-            # while 循环检测是否有环
-            if not (fast and fast.next): return
-            fast, slow = fast.next.next, slow.next
-            # 快慢指针相遇，说明有环，跳出
-            if fast == slow: break
-        # 求入环节点
+            if not (fast and fast.next and fast.next.next): return
+            slow, fast = slow.next, fast.next.next
+            if slow is fast: break
+
         fast = head
-        while fast != slow:
-            fast, slow = fast.next, slow.next
-        return fast
+        while not (fast is slow):
+            slow, fast = slow.next, fast.next
+
+        return slow
 
 
 """

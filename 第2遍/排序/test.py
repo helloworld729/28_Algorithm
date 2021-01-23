@@ -1,23 +1,25 @@
-def mergesort(lst, left, right):
-    def merge(lst, left, middle, right):
-        cans = list()
-        i, j = left, middle+1  # 定义指针起点
-        while i <= middle or j <= right:
-            if j > right or i <= middle and lst[i] <= lst[j]:
-                cans.append(lst[i])
-                i += 1
-            elif i > middle or j <= right and lst[i] > lst[j]:
-                cans.append(lst[j])
-                j += 1
-        lst[left: right+1] = cans
+# 输入: "babad"
+# 输出: "bab"
+# 注意: "aba" 也是一个有效答案。
+# 中心扩展算法：如果两侧数据一样的话就增长
 
-    if left >= right: return
-    middle = left + (right-left)//2
-    mergesort(lst, left, middle)
-    mergesort(lst, middle+1, right)
-    merge(lst, left, middle, right)
+def centerExpand(s, left, right):
+    while left >= 0 and right <= len(s)-1 and s[left] == s[right]:
+        left, right = left-1, right + 1
+    return left+1, right-1
 
-lst = [1, 2, 4, 3, 6, 5, 8, 7, 0]
-mergesort(lst, 0, len(lst)-1)
-print(lst)
+def maxCountPart(s="abab"):
+    length = len(s)
+    start, end = 0, 0
+    for i in range(length):
+        left1, right1 = centerExpand(s, i, i+0)
+        left2, right2 = centerExpand(s, i, i+1)
+        if right1 - left1 > end - start:
+            start, end = left1, right1
+        if right2 - left2 > end - start:
+            start, end = left2, right2
+    return s[start:end+1]
+
+
+print(maxCountPart())
 
