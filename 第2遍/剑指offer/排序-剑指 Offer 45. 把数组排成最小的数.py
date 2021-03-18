@@ -6,8 +6,10 @@
 import functools
 class Solution:
     def minNumber(self, nums) -> str:
+        # 为什么呢？因为一个数除以同级别的9会得到一个以自身为循环节的无限循环
         temp = sorted(nums,key=lambda x:x/(pow(10, len(str(x)))-1))  # 以21为例，这里是除以99，而不是10
         return ''.join(map(str,temp))
+
 
     def minNumber2(self, nums):
         def sort_rule(x, y):

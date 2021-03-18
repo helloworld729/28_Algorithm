@@ -60,3 +60,8 @@ a = Solution()
 lst = [5, 4, 3, 2, 1]
 print(a.reversePairs2(lst))
 
+
+# 注意点：
+# 1、主程序中右侧排序的时候，mid+1开始
+# merge程序中，主数组的起点不是0
+

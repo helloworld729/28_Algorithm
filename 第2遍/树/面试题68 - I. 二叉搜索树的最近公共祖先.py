@@ -25,3 +25,4 @@ class Solution:
         right = self.lowestCommonAncestor(root.right, p, q)
         if left and right: return root  # 左右子树分别找到了一个，说明节点就是祖先
         return left if left else right  # 只在一侧(当然可能在子树的两侧)
+        # 隐含信息：假如p，q只有一个在树里面，那么会返回存在的节点

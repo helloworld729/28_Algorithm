@@ -14,6 +14,8 @@ class Solution:
             ret ^= d
 
         tech = 1
+        # 注意：这个地方不能用 ！= 1 判断，因为
+        # 一旦等于1了，就卡住了
         while ret & tech == 0:
             tech <<= 1
 

@@ -35,34 +35,32 @@ class Solution:
         return visited[head]
 
     def copyRandomList2(self, head: 'Node') -> 'Node':
-        """链表拷贝-->random定向-->链表分离"""
         if not head: return head
-        h1 = head
+        # 链表 拷贝 与 嵌入
+        # random定向
+        # 链表分离
 
         # 链表拷贝
-        while h1:
-            copy = Node(h1.val)
-            copy.next = h1.next
-            h1.next = copy
-            h1 = h1.next.next
-        new_head = head.next
-        h2 = head
-        new_head2 = new_head
+        head1 = head
+        while head1:
+            node = Node(head1.val)  # value copy
+            node.next = head1.next  # next copy
+            head1.next = node  # 向后连接
+            head1 = node.next  # 向前连接
 
-        # random定向
-        while h2:
-            if h2.random:
-                new_head2.random = h2.random.next
-            h2 = h2.next.next
-            if h2 and h2.next:
-                new_head2 = h2.next
+        # random 定向
+        head1 = head
+        while head1 and head1.next:
+            head1.next.random = head1.random.next \
+                if head1.random else None
+            head1 = head1.next.next
 
         # 链表分离
-        new_head3 = new_head
-        while new_head3:
-            if new_head3.next:
-                new_head3.next = new_head3.next.next
-            new_head3 = new_head3.next
-        return new_head
+        copyHead1, copyHead2 = head.next, head.next
+        while copyHead1 and copyHead1.next:
+            copyHead1.next = copyHead1.next.next
+            copyHead1 = copyHead1.next
+
+        return copyHead2
 
 
