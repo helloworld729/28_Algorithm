@@ -17,7 +17,7 @@ class test():
 
 
 
-t = test()
+t = test()  # test
 # for i in range(5):
 #     print(t.__next__())
 # for i in t:
