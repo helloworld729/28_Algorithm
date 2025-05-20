@@ -16,3 +16,5 @@ print(lst)  # [1, 3, 3, 5, 7, 7, 8]
 bisect.insort_right(lst, 7)  # 在原list有序的前提下，插入当前数字
 print(lst)  # [1, 3, 3, 5, 7, 7, 7, 8]
 
+# heklo
+
